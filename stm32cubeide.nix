@@ -14,6 +14,7 @@
   openssl,
   udev,
   xorg,
+  krb5,
   fontconfig,
   pcsclite,
   python3,
@@ -91,6 +92,7 @@ let
       pcsclite
       python3
       libusb1
+      krb5
     ]
     ++ (with xorg; [
       libX11

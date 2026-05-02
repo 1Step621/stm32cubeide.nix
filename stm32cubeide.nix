@@ -19,6 +19,8 @@
   pcsclite,
   python3,
   requireFile,
+  makeDesktopItem,
+  symlinkJoin,
   ...
 }:
 let
@@ -148,31 +150,49 @@ let
     '';
   };
 
-in
-buildFHSEnv {
-  name = "stm32cubeide";
+  fhsEnv = buildFHSEnv {
+    name = "stm32cubeide";
 
-  targetPkgs =
-    pkgs: with pkgs; [
-      stm32cubeide
-      gtk3
-      cairo
-      glib
-      webkitgtk_6_0
-      gvfs
-      dbus
+    targetPkgs =
+      pkgs: with pkgs; [
+        stm32cubeide
+        gtk3
+        cairo
+        glib
+        webkitgtk_6_0
+        gvfs
+        dbus
+      ];
+
+    # runScript = ''
+    #   #!${bash}/bin/bash
+    #   echo "STM32CubeIDE FHS environment ready."
+    #   echo "Run '${stm32cubeide}/stm32cubeide' to start the IDE."
+    #   bash
+    # '';
+    profile = ''
+      export GDK_BACKEND=x11
+      export GTK_THEME=Adwaita:light
+    '';
+
+    runScript = "${stm32cubeide}/stm32cubeide";
+  };
+
+  desktopItem = makeDesktopItem {
+    name = "stm32cubeide";
+    desktopName = "STM32CubeIDE";
+    exec = "${fhsEnv}/bin/stm32cubeide";
+    icon = "${stm32cubeide}/icon.xpm";
+    categories = [
+      "Development"
+      "IDE"
     ];
-
-  # runScript = ''
-  #   #!${bash}/bin/bash
-  #   echo "STM32CubeIDE FHS environment ready."
-  #   echo "Run '${stm32cubeide}/stm32cubeide' to start the IDE."
-  #   bash
-  # '';
-  profile = ''
-    export GDK_BACKEND=x11
-    export GTK_THEME=Adwaita:light
-  '';
-
-  runScript = "${stm32cubeide}/stm32cubeide";
+  };
+in
+symlinkJoin {
+  name = "stm32cubeide";
+  paths = [
+    fhsEnv
+    desktopItem
+  ];
 }

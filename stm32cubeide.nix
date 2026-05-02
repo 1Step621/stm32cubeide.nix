@@ -13,7 +13,16 @@
   bzip2,
   openssl,
   udev,
-  xorg,
+  libx11,
+  libsm,
+  libice,
+  libxrender,
+  libxrandr,
+  libxfixes,
+  libxcursor,
+  libxext,
+  libxtst,
+  libxi,
   krb5,
   fontconfig,
   pcsclite,
@@ -96,19 +105,17 @@ let
       python3
       libusb1
       krb5
-    ]
-    ++ (with xorg; [
-      libX11
-      libSM
-      libICE
-      libXrender
-      libXrandr
-      libXfixes
-      libXcursor
-      libXext
-      libXtst
-      libXi
-    ]);
+      libx11
+      libsm
+      libice
+      libxrender
+      libxrandr
+      libxfixes
+      libxcursor
+      libxext
+      libxtst
+      libxi
+    ];
 
     autoPatchelfIgnoreMissingDeps = true; # libcrypto.so.1.0.0
     preferLocalBuild = true;

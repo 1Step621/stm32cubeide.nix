@@ -171,6 +171,7 @@ buildFHSEnv {
   # '';
   profile = ''
     export GDK_BACKEND=x11
+    export GTK_THEME=Adwaita:light
   '';
 
   runScript = "${stm32cubeide}/stm32cubeide";

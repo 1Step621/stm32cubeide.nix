@@ -21,6 +21,7 @@
   requireFile,
   makeDesktopItem,
   symlinkJoin,
+  imagemagick,
   ...
 }:
 let
@@ -178,11 +179,24 @@ let
     runScript = "${stm32cubeide}/stm32cubeide";
   };
 
+  iconPng = stdenv.mkDerivation {
+    name = "stm32cubeide-icon";
+
+    nativeBuildInputs = [ imagemagick ];
+
+    buildCommand = ''
+      mkdir -p $out/share/icons/hicolor/256x256/apps
+
+      convert ${stm32cubeide}/icon.xpm \
+        $out/share/icons/hicolor/256x256/apps/stm32cubeide.png
+    '';
+  };
+
   desktopItem = makeDesktopItem {
     name = "stm32cubeide";
     desktopName = "STM32CubeIDE";
     exec = "${fhsEnv}/bin/stm32cubeide";
-    icon = "${stm32cubeide}/icon.xpm";
+    icon = "stm32cubeide";
     categories = [
       "Development"
       "IDE"
@@ -194,5 +208,6 @@ symlinkJoin {
   paths = [
     fhsEnv
     desktopItem
+    iconPng
   ];
 }
